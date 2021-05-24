@@ -2,6 +2,7 @@ import {iconfig} from './config/IConfig';
 import bodyParser = require('body-parser');
 import {errorHandlerMiddleware} from './libs/errorHandler';
 import {notFoundRoutesMiddleware} from './libs/notFoundRoute';
+import {router} from './router';
 export class Server {
     config;
     app;
@@ -41,5 +42,8 @@ export class Server {
         this.app.get('/health-check',(req,res)=> {
             res.send('i am OK');
         })
+
+        this.app.use('/api',router);
+     
     }
 }

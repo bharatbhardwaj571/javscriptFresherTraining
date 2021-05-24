@@ -4,6 +4,7 @@ exports.Server = void 0;
 const bodyParser = require("body-parser");
 const errorHandler_1 = require("./libs/errorHandler");
 const notFoundRoute_1 = require("./libs/notFoundRoute");
+const router_1 = require("./router");
 class Server {
     constructor(config, app) {
         this.config = config;
@@ -32,6 +33,7 @@ class Server {
         this.app.get('/health-check', (req, res) => {
             res.send('i am OK');
         });
+        this.app.use('/api', router_1.router);
     }
 }
 exports.Server = Server;
