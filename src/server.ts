@@ -1,4 +1,7 @@
 import {iconfig} from './config/IConfig';
+import bodyParser = require('body-parser');
+import {errorHandlerMiddleware} from './libs/errorHandler';
+import {notFoundRoutesMiddleware} from './libs/notFoundRoute';
 export class Server {
     config;
     app;
@@ -7,8 +10,20 @@ export class Server {
         this.app = app;
     }
 
+    initBodyParser(){
+       this.app.use(bodyParser.urlencoded({ extended: false }))
+ 
+// parse application/json
+        this.setupRoutes();
+        this.app.use(bodyParser.json())
+        this.app.use(notFoundRoutesMiddleware)
+        this.app.use(errorHandlerMiddleware)
+
+        
+    }
+
     bootstrap(){
-        console.log(this.config.port);
+        this.initBodyParser();
         this.app.listen(this.config.port,(err)=> {
             if(err){
                 console.log( 'error')
@@ -17,7 +32,8 @@ export class Server {
             }
         })
         
-       this.setupRoutes();
+ 
+    
         
     }
 
