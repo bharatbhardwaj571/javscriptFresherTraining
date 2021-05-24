@@ -1,4 +1,4 @@
-export const diamond2 =(n) => {
+export const diamond2 =(n:number):void => {
     for(let i=0; i<n; i++){
         let str="";
         for(let j=i; j<n-1; j++){
@@ -12,7 +12,7 @@ export const diamond2 =(n) => {
     }
 }
 
-export const diamondPattern =(n) => {
+export const diamondPattern =(n:number):void => {
     for(let i =0; i<n; i++){
         let str=""
        
