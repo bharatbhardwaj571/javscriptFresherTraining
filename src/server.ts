@@ -2,7 +2,10 @@ import {iconfig} from './config/IConfig';
 import bodyParser = require('body-parser');
 import {errorHandlerMiddleware} from './libs/errorHandler';
 import {notFoundRoutesMiddleware} from './libs/notFoundRoute';
+import {configMiddelware} from './libs/configMiddelware';
+import {authMiddleware} from './libs/routes/authMiddleWare';
 import {router} from './router';
+
 export class Server {
     config;
     app;
@@ -15,8 +18,11 @@ export class Server {
        this.app.use(bodyParser.urlencoded({ extended: false }))
  
 // parse application/json
-        this.setupRoutes();
         this.app.use(bodyParser.json())
+        this.app.use(configMiddelware)
+        this.app.use(authMiddleware);
+        this.setupRoutes();
+      
         this.app.use(notFoundRoutesMiddleware)
         this.app.use(errorHandlerMiddleware)
 
@@ -40,6 +46,7 @@ export class Server {
 
     setupRoutes():void{
         this.app.get('/health-check',(req,res)=> {
+            console.log(req.config);
             res.send('i am OK');
         })
 
