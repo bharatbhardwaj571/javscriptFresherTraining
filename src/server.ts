@@ -7,6 +7,8 @@ import {configMiddelware} from './libs/configMiddelware';
 import {authMiddleware} from './libs/routes/authMiddleWare';
 import {Database} from './libs/Database';
 import {router} from './router';
+import {userRouter} from './controllers/user/index';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 config();
 
@@ -25,7 +27,7 @@ export class Server extends Database {
 // parse application/json
         this.app.use(bodyParser.json())
         this.app.use(configMiddelware)
-        // this.app.use(authMiddleware);
+       
         this.setupRoutes();
       
         this.app.use(notFoundRoutesMiddleware)
@@ -56,7 +58,8 @@ export class Server extends Database {
             res.send('i am OK');
         })
 
-        this.app.use('/api',router);
+        this.app.use('/api',authMiddleware,router);
+        this.app.use('/user',userRouter);
      
     }
 }
