@@ -1,15 +1,20 @@
 import {iconfig} from './config/IConfig';
+import {config} from 'dotenv';
 import bodyParser = require('body-parser');
 import {errorHandlerMiddleware} from './libs/errorHandler';
 import {notFoundRoutesMiddleware} from './libs/notFoundRoute';
 import {configMiddelware} from './libs/configMiddelware';
 import {authMiddleware} from './libs/routes/authMiddleWare';
+import {Database} from './libs/Database';
 import {router} from './router';
 
-export class Server {
+config();
+
+export class Server extends Database {
     config;
     app;
     constructor(config:iconfig,app){
+        super();
         this.config = config;
         this.app = app;
     }
@@ -20,7 +25,7 @@ export class Server {
 // parse application/json
         this.app.use(bodyParser.json())
         this.app.use(configMiddelware)
-        this.app.use(authMiddleware);
+        // this.app.use(authMiddleware);
         this.setupRoutes();
       
         this.app.use(notFoundRoutesMiddleware)
@@ -31,6 +36,7 @@ export class Server {
 
     bootstrap(){
         this.initBodyParser();
+        this.open(process.env.MONGO_URL);
         this.app.listen(this.config.port,(err)=> {
             if(err){
                 console.log( 'error')
